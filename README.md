@@ -9,8 +9,13 @@ DMG / EXE 侧载产物分发。
 ## 资产命名（D28）
 
 ```
-libmpv-{os}-{arch}-{ver}.{dylib|dll}
-libmpv-{os}-{arch}-{ver}.{dylib|dll}.sha256
+# Windows：单一自包含 dll
+libmpv-windows-{arch}-{ver}.dll
+libmpv-windows-{arch}-{ver}.dll.sha256
+
+# macOS：动态库集合（libmpv.dylib + @rpath 依赖 dylib，整组随 App Frameworks 分发）
+libmpv-macos-{arch}-{ver}.tar.gz
+libmpv-macos-{arch}-{ver}.tar.gz.sha256
 ```
 
 ## 当前状态
@@ -18,6 +23,7 @@ libmpv-{os}-{arch}-{ver}.{dylib|dll}.sha256
 | 平台 | 资产 | 来源 |
 |------|------|------|
 | Windows x86_64 | `libmpv-windows-x86_64-0.0.1.dll` | mpv 官方 Windows 构建（shinchiro/mpv-winbuild-cmake），自包含 FFmpeg |
-| macOS arm64 | 待制备 | 公开源仅提供静态 `libmpv.a`，无法作为 dylib 分发 |
+| macOS arm64 | `libmpv-macos-arm64-0.0.1.tar.gz`（18 个 dylib） | media_kit [libmpv-darwin-build](https://github.com/media-kit/libmpv-darwin-build) v0.7.3 `macos-arm64-video-default`（LGPL） |
 
 > 本仓库公开 ⇒ CI 无需额外 secret 即可下载（`fetch_libmpv.sh` 匿名走 Releases API）。
+> SHA256 同步登记于主仓库 `scripts/libmpv_external_dependencies.json`。
